@@ -1,199 +1,240 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>מצגת דוגמה מלאה</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Assistant', sans-serif;
-      background: #111;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .slideshow {
-      position: relative;
-      width: 90%;
-      height: 90%;
-      max-width: 1000px;
-      background: #000;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 0 30px rgba(0,0,0,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-    .slide {
-      display: none;
-      width: 100%;
-      height: 100%;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      position: relative;
-      animation: fadeIn 1s;
-    }
-    .slide.active { display: flex; }
-    .slide img, .slide video, .slide iframe {
-      max-width: 100%;
-      max-height: 80%;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-    .caption {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #fff;
-      padding: 15px 20px;
-      background: rgba(0,0,0,0.5);
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
-      border-top: 2px solid #444;
-      opacity: 0;
-      animation: fadeCaption 1s forwards;
-      direction: rtl;
-      line-height: 1.4;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-    @keyframes fadeCaption {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    .controls {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-      padding: 0 20px;
-      z-index: 10;
-    }
-    .btn {
-      background: rgba(0,0,0,0.5);
-      border: none;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      transition: 0.3s;
-    }
-    .btn:hover { background: rgba(255,255,255,0.3); color: #000; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מצגת מקצועית מ-Assets עם Extended Captions</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Assistant', sans-serif;
+  background: #111;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+.slideshow {
+  position: relative;
+  width: 90%;
+  height: 90%;
+  max-width: 1000px;
+  background: #000;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+.slide.active { display: flex; animation: fadeIn 1s; }
+.slide img, .slide video, .slide iframe {
+  max-width: 100%;
+  max-height: 80%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+.caption {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  padding: 15px 20px;
+  background: rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+  border-top: 2px solid #444;
+  opacity: 0;
+  transition: all 1s ease;
+  direction: rtl;
+  line-height: 1.4;
+}
+.controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 20px;
+  z-index: 10;
+}
+.btn {
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  transition: 0.3s;
+}
+.btn:hover { background: rgba(255,255,255,0.3); color: #000; }
+
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes glowText { 0% { text-shadow: 0 0 5px #FFD700; } 50% { text-shadow: 0 0 20px #FFD700; } 100% { text-shadow: 0 0 5px #FFD700; } }
+</style>
 </head>
 <body>
-  <div class="slideshow" id="slideshow">
-    <div class="controls">
-      <button class="btn prev" onclick="prevSlide()">&#10094;</button>
-      <button class="btn next" onclick="nextSlide()">&#10095;</button>
-    </div>
-    <div id="yt-player" style="display:none;"></div>
+<div class="slideshow" id="slideshow">
+  <div class="controls">
+    <button class="btn prev" onclick="prevSlide()">&#10094;</button>
+    <button class="btn next" onclick="nextSlide()">&#10095;</button>
   </div>
+  <div id="yt-player" style="display:none;"></div>
+</div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script>
-    let slides = [];
-    let currentIndex = 0;
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+let slides = [];
+let currentIndex = 0;
 
-    // הדוגמאות: תמונות, וידאו, PDF
-    const mediaFiles = [
-      { type: "img", src: "https://via.placeholder.com/800x500?text=תמונה+1", caption: "תמונה ראשונה" },
-      { type: "img", src: "https://via.placeholder.com/800x500?text=תמונה+2", caption: "תמונה שנייה" },
-      { type: "video", src: "https://sample-videos.com/video123/mp4/480/asdasdas.mp4", caption: "וידאו דוגמה" },
-      { type: "iframe", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", caption: "קובץ PDF" },
-      { type: "img", src: "https://via.placeholder.com/800x500?text=תמונה+3", caption: "תמונה שלישית" }
-    ];
+// הרפו והתיקייה הציבורית שלך
+const user = "maonr-collab";
+const repo = "gallery";
+const folder = "assets";
+const githubApi = `https://api.github.com/repos/${user}/${repo}/contents/${folder}`;
 
-    const extendedCaptions = [
-      { text: "טקסט מורחב מקצועי בעברית על פני 2 שקופיות", startSlide: 0, endSlide: 1, style: { fontSize: "28px", color: "#FFD700", textShadow: "2px 2px 10px rgba(0,0,0,0.9)", background: "rgba(0,0,0,0.5)" } }
-    ];
+// Extended captions עם משך הופעה מותאם
+const extendedCaptions = [
+  {
+    text: "ברוכים הבאים למצגת מקצועית בעברית!",
+    startSlide: 0,
+    endSlide: 1,
+    duration: 6000, // זמן הופעה במילישניות
+    style: { fontSize: "28px", color: "#FFD700", textShadow: "0 0 15px #FFD700", background: "rgba(0,0,0,0.5)" }
+  },
+  {
+    text: "כיתוב נוסף לאורך 3 שקופיות עם אפקט Glow",
+    startSlide: 2,
+    endSlide: 4,
+    duration: 9000,
+    style: { fontSize: "24px", color: "#00FFFF", textShadow: "0 0 20px #00FFFF", background: "rgba(0,0,0,0.4)" }
+  }
+];
 
-    function loadSlides() {
-      const container = document.getElementById("slideshow");
-      mediaFiles.forEach(file => {
-        const slide = document.createElement("div");
-        slide.className = "slide";
+// פונקציה להביא את הקבצים מתיקיית assets
+async function fetchAssets() {
+  try {
+    const res = await fetch(githubApi);
+    if (!res.ok) throw new Error("Failed to fetch assets");
+    const files = await res.json();
+    return files.filter(f => /\.(jpg|jpeg|png|gif|mp4|pdf)$/i.test(f.name));
+  } catch(e) {
+    console.error(e);
+    return [];
+  }
+}
 
-        let media;
-        if(file.type === "img") {
-          media = document.createElement("img");
-          media.src = file.src;
-        } else if(file.type === "video") {
-          media = document.createElement("video");
-          media.src = file.src;
-          media.controls = true;
-        } else if(file.type === "iframe") {
-          media = document.createElement("iframe");
-          media.src = file.src;
-        }
+async function loadSlides() {
+  const container = document.getElementById("slideshow");
+  const assets = await fetchAssets();
 
-        slide.appendChild(media);
+  if(assets.length === 0) {
+    container.innerHTML = "<p>אין קבצים להציג</p>";
+    return;
+  }
 
-        const captionOverlay = document.createElement("div");
-        captionOverlay.className = "caption";
-        captionOverlay.textContent = file.caption;
-        slide.appendChild(captionOverlay);
+  assets.forEach(file => {
+    const slide = document.createElement("div");
+    slide.className = "slide";
 
-        container.appendChild(slide);
-        slides.push({element: slide, caption: file.caption, captionOverlay});
-      });
-
-      if(slides.length) showSlide(0);
-      setInterval(() => showSlide(currentIndex + 1), 6000);
-
-      initYouTubeBackground("VIDEO_ID"); // הכנסי את ID של השיר מיוטיוב
+    let media;
+    if(/\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
+      media = document.createElement("img");
+      media.src = file.download_url;
+    } else if(/\.mp4$/i.test(file.name)) {
+      media = document.createElement("video");
+      media.src = file.download_url;
+      media.controls = true;
+    } else if(/\.pdf$/i.test(file.name)) {
+      media = document.createElement("iframe");
+      media.src = file.download_url;
     }
 
-    function showSlide(n) {
-      if(slides.length === 0) return;
-      slides[currentIndex].element.classList.remove("active");
-      currentIndex = (n + slides.length) % slides.length;
-      slides[currentIndex].element.classList.add("active");
+    slide.appendChild(media);
 
-      const extended = extendedCaptions.find(c => currentIndex >= c.startSlide && currentIndex <= c.endSlide);
-      slides.forEach(s => s.captionOverlay.style.opacity = 0);
-      if(extended) {
-        slides[currentIndex].captionOverlay.textContent = extended.text;
-        Object.assign(slides[currentIndex].captionOverlay.style, extended.style);
-      } else {
-        slides[currentIndex].captionOverlay.textContent = slides[currentIndex].caption;
-        slides[currentIndex].captionOverlay.style.opacity = 1;
-      }
-    }
+    const captionOverlay = document.createElement("div");
+    captionOverlay.className = "caption";
+    captionOverlay.textContent = file.name.replace(/\.[^/.]+$/, "");
+    slide.appendChild(captionOverlay);
 
-    function nextSlide() { showSlide(currentIndex + 1); }
-    function prevSlide() { showSlide(currentIndex - 1); }
+    container.appendChild(slide);
+    slides.push({element: slide, captionOverlay});
+  });
 
-    let player;
-    function initYouTubeBackground(videoId) {
-      window.onYouTubeIframeAPIReady = function() {
-        player = new YT.Player('yt-player', {
-          height: '0',
-          width: '0',
-          videoId: videoId,
-          playerVars: { autoplay: 1, controls: 0, loop: 0, rel:0 },
-          events: { 'onReady': e => e.target.playVideo() }
-        });
-      };
-    }
+  showSlide(0);
+  scheduleNextSlide();
+  initYouTubeBackground("VIDEO_ID"); // הכנסי ID של YouTube ברקע
+}
 
-    loadSlides();
-  </script>
+// הצגת שקופית והפעלת extended caption עם משך מותאם
+function showSlide(n) {
+  if(slides.length === 0) return;
+
+  slides[currentIndex].element.classList.remove("active");
+  currentIndex = (n + slides.length) % slides.length;
+  slides[currentIndex].element.classList.add("active");
+
+  const extended = extendedCaptions.find(c => currentIndex >= c.startSlide && currentIndex <= c.endSlide);
+  slides.forEach(s => s.captionOverlay.style.opacity = 0);
+
+  if(extended) {
+    const caption = slides[currentIndex].captionOverlay;
+    caption.textContent = extended.text;
+    Object.assign(caption.style, extended.style);
+    caption.style.opacity = 1;
+    caption.style.animation = "glowText 1.5s infinite alternate";
+  } else {
+    const caption = slides[currentIndex].captionOverlay;
+    caption.textContent = caption.textContent;
+    caption.style.opacity = 1;
+    caption.style.animation = "none";
+  }
+}
+
+// תזמון השקופיות בהתאם ל-duration של extended captions
+function scheduleNextSlide() {
+  const extended = extendedCaptions.find(c => currentIndex >= c.startSlide && currentIndex <= c.endSlide);
+  const duration = extended ? extended.duration : 6000;
+  setTimeout(() => {
+    showSlide(currentIndex + 1);
+    scheduleNextSlide();
+  }, duration);
+}
+
+function nextSlide() { showSlide(currentIndex + 1); }
+function prevSlide() { showSlide(currentIndex - 1); }
+
+// YouTube ברקע
+let player;
+function initYouTubeBackground(videoId) {
+  window.onYouTubeIframeAPIReady = function() {
+    player = new YT.Player('yt-player', {
+      height: '0',
+      width: '0',
+      videoId: videoId,
+      playerVars: { autoplay: 1, controls: 0, loop: 0, rel:0 },
+      events: { 'onReady': e => e.target.playVideo() }
+    });
+  };
+}
+
+loadSlides();
+</script>
 </body>
 </html>

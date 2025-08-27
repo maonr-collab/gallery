@@ -1,14 +1,14 @@
 [
   {
-    "src": "assets/photo1.jpg",
-    "caption": "זהו טקסט התיאור של התמונה הראשונה"
-  },
-  {
-    "src": "assets/photo2.jpg",
-    "caption": "כיתובית אחרת על פני שתי שקופיות"
+    "src": "assets/image1.jpg",
+    "caption": "רגע קסום עם הילדים"
   },
   {
     "src": "assets/video1.mp4",
-    "caption": "גם וידאו נתמך"
+    "caption": "הסרטון המרגש שלנו"
+  },
+  {
+    "src": "assets/image2.png",
+    "caption": "חיוך שווה אלף מילים"
   }
 ]

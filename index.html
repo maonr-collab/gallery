@@ -2,7 +2,8 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>הגלריה שלי</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מצגת דוגמה מלאה</title>
   <style>
     body {
       margin: 0;
@@ -104,64 +105,53 @@
     </div>
     <div id="yt-player" style="display:none;"></div>
   </div>
-  
+
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let slides = [];
     let currentIndex = 0;
-    const extendedCaptions = [
-      {
-        text: "כאן מופיע טקסט מורחב על פני 3 שקופיות, בעברית, עם אפקט מקצועי",
-        startSlide: 0,
-        endSlide: 2,
-        style: {
-          fontSize: "28px",
-          color: "#FFD700",
-          textShadow: "2px 2px 10px rgba(0,0,0,0.9)",
-          background: "rgba(0,0,0,0.5)"
-        }
-      }
+
+    // הדוגמאות: תמונות, וידאו, PDF
+    const mediaFiles = [
+      { type: "img", src: "https://via.placeholder.com/800x500?text=תמונה+1", caption: "תמונה ראשונה" },
+      { type: "img", src: "https://via.placeholder.com/800x500?text=תמונה+2", caption: "תמונה שנייה" },
+      { type: "video", src: "https://sample-videos.com/video123/mp4/480/asdasdas.mp4", caption: "וידאו דוגמה" },
+      { type: "iframe", src: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", caption: "קובץ PDF" },
+      { type: "img", src: "https://via.placeholder.com/800x500?text=תמונה+3", caption: "תמונה שלישית" }
     ];
 
-    const repo = "maonr-collab/gallery";   // שם המשתמש והרפו
-    const path = "assets";                     // תיקיית הקבצים
-    const token = "PASTE_YOUR_TOKEN_HERE";     // Personal Access Token
+    const extendedCaptions = [
+      { text: "טקסט מורחב מקצועי בעברית על פני 2 שקופיות", startSlide: 0, endSlide: 1, style: { fontSize: "28px", color: "#FFD700", textShadow: "2px 2px 10px rgba(0,0,0,0.9)", background: "rgba(0,0,0,0.5)" } }
+    ];
 
-    async function loadSlides() {
-      const apiUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
-      const res = await fetch(apiUrl, { headers: { Authorization: `token ${token}` }});
-      const files = await res.json();
+    function loadSlides() {
       const container = document.getElementById("slideshow");
-
-      files.forEach(file => {
-        const ext = file.name.split('.').pop().toLowerCase();
-        let name = file.name.replace(/\.[^/.]+$/, '').replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
-
+      mediaFiles.forEach(file => {
         const slide = document.createElement("div");
         slide.className = "slide";
 
         let media;
-        if (["jpg","jpeg","png","gif","webp"].includes(ext)) {
+        if(file.type === "img") {
           media = document.createElement("img");
-          media.src = file.download_url;
-        } else if (["mp4","webm"].includes(ext)) {
+          media.src = file.src;
+        } else if(file.type === "video") {
           media = document.createElement("video");
-          media.src = file.download_url;
+          media.src = file.src;
           media.controls = true;
-        } else if (ext === "pdf") {
+        } else if(file.type === "iframe") {
           media = document.createElement("iframe");
-          media.src = file.download_url;
-        } else return;
+          media.src = file.src;
+        }
 
         slide.appendChild(media);
 
         const captionOverlay = document.createElement("div");
         captionOverlay.className = "caption";
-        captionOverlay.textContent = name;
+        captionOverlay.textContent = file.caption;
         slide.appendChild(captionOverlay);
 
         container.appendChild(slide);
-        slides.push({element: slide, caption: name, captionOverlay});
+        slides.push({element: slide, caption: file.caption, captionOverlay});
       });
 
       if(slides.length) showSlide(0);
@@ -173,7 +163,6 @@
     function showSlide(n) {
       if(slides.length === 0) return;
       slides[currentIndex].element.classList.remove("active");
-
       currentIndex = (n + slides.length) % slides.length;
       slides[currentIndex].element.classList.add("active");
 

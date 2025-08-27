@@ -1,0 +1,14 @@
+[
+  {
+    "src": "assets/photo1.jpg",
+    "caption": "זהו טקסט התיאור של התמונה הראשונה"
+  },
+  {
+    "src": "assets/photo2.jpg",
+    "caption": "כיתובית אחרת על פני שתי שקופיות"
+  },
+  {
+    "src": "assets/video1.mp4",
+    "caption": "גם וידאו נתמך"
+  }
+]
